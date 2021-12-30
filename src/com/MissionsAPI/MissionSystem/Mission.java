@@ -33,4 +33,5 @@ public abstract class Mission {
     public int getId() {
         return id;
     }
+
 }
