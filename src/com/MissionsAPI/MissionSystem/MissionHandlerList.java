@@ -19,6 +19,7 @@ public class MissionHandlerList implements iJsonable {
     private static final MissionHandlerList Instance;
     static JSONSerializer jsonSerializer;
     private JavaPlugin javaPlugin;
+    private final Map<UUID,MissionEntry> missionEntries = new HashMap<>();
 
     static {
         JavaPlugin javaPlugin1 = JavaPlugin.getProvidingPlugin(MissionHandlerList.class);
@@ -45,6 +46,16 @@ public class MissionHandlerList implements iJsonable {
     @Override
     public String getChild() {
         return "missions.json";
+    }
+
+    public MissionEntry getorAdd(UUID uuid) {
+        if (uuid == null) return null;
+        missionEntries.putIfAbsent(uuid,new MissionEntry(uuid));
+        return missionEntries.get(uuid);
+    }
+
+    public MissionEntry getorAdd(OfflinePlayer offlinePlayer) {
+        return offlinePlayer == null ? null : this.getorAdd(offlinePlayer.getUniqueId());
     }
 
     public static class MissionEntry {

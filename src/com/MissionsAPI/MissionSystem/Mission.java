@@ -34,4 +34,13 @@ public abstract class Mission {
         return id;
     }
 
+    public abstract boolean hasGoalBeenMet();
+    public abstract void invokeGoal();
+    public abstract void onMissionEnd();
+
+    public void endMission() {
+        onMissionEnd();
+
+    }
+
 }
