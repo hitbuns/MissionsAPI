@@ -7,6 +7,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class MissionHandlerList implements iJsonable {
@@ -44,30 +47,33 @@ public class MissionHandlerList implements iJsonable {
         return "missions.json";
     }
 
+    public static class MissionEntry {
 
-    public static abstract class Mission {
-
+        private final Map<String,Mission> missions = new HashMap<>();
         private final UUID uuid;
-        private final int id = MissionHandlerList.getInstance().generateNextID();
-        private OfflinePlayer cachedPlayer;
+        private transient OfflinePlayer cachedPlayer;
 
-        public OfflinePlayer getCachedPlayer() {
-            return cachedPlayer != null ? cachedPlayer :
-                    uuid != null ? (this.cachedPlayer = Bukkit.getOfflinePlayer(
-                            uuid
-                    )) : null;
+        public MissionEntry(UUID uuid) {
+            this.uuid = uuid;
         }
 
-        public Mission(UUID uuid) {
-            this.uuid = uuid;
+        public MissionEntry(OfflinePlayer offlinePlayer) {
+            this(offlinePlayer.getUniqueId());
+        }
+
+        public Collection<Mission> getMissions() {
+            return missions.values();
         }
 
         public UUID getUuid() {
             return uuid;
         }
 
-        public int getId() {
-            return id;
+        public OfflinePlayer getCachedPlayer() {
+            return cachedPlayer != null ? cachedPlayer :
+                    uuid != null ? (this.cachedPlayer =
+                            Bukkit.getOfflinePlayer(uuid)) : null;
         }
     }
+
 }
